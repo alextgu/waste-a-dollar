@@ -13,9 +13,9 @@ import Footer from "./components/Footer";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[var(--color-background)]">
+    <div className="h-screen overflow-y-auto overflow-x-hidden snap-y snap-mandatory bg-[var(--color-background)]">
       <Navbar />
-      <main className="pt-20">
+      <main>
         <Hero />
         <HeroTwo />
         <WhatYourMoneyCanDo />
@@ -24,7 +24,10 @@ export default function Home() {
         <Leaderboard />
         <StillNotConvinced />
       </main>
-      <Footer />
+      {/* Last page: full viewport but free scroll inside so user can see all footer content */}
+      <div className="h-screen shrink-0 snap-start overflow-y-auto overflow-x-hidden">
+        <Footer />
+      </div>
     </div>
   );
 }
