@@ -1,27 +1,32 @@
-import Navbar from "./sections/Navbar";
-import Hero from "./sections/Hero";
-import HeroTwo from "./sections/HeroTwo";
-import WhatYourMoneyCanDo from "./sections/WhatYourMoneyCanDo";
-import Ratings from "./sections/Ratings";
-import FAQ from "./sections/FAQ";
-import Leaderboard from "./sections/Leaderboard";
-import StillNotConvinced from "./sections/StillNotConvinced";
-import Footer from "./sections/Footer";
+import {
+  HeroOne as Hero,
+  HeroTwo,
+  MoneyCanDoThree as WhatYourMoneyCanDo,
+  RatingsFour as Ratings,
+  FAQFive as FAQ,
+  LeaderboardSix as Leaderboard,
+  StillNotConvincedSeven as StillNotConvinced,
+} from "./sections";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-black">
+    <div className="h-screen overflow-y-auto overflow-x-hidden snap-y snap-mandatory bg-[var(--color-background)]">
       <Navbar />
-      <main className="pt-20">
+      <main>
         <Hero />
-        <HeroTwo />
         <WhatYourMoneyCanDo />
+        <HeroTwo />
         <Ratings />
         <FAQ />
         <Leaderboard />
-        <StillNotConvinced />
+        <div className="h-screen shrink-0 snap-start overflow-y-auto overflow-x-hidden">
+          <StillNotConvinced connectFooter />
+          <Footer />
+        </div>
       </main>
-      <Footer />
     </div>
   );
 }
