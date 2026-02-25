@@ -22,12 +22,11 @@ export default function Home() {
         <Ratings />
         <FAQ />
         <Leaderboard />
-        <StillNotConvinced />
+        <div className="h-screen shrink-0 snap-start overflow-y-auto overflow-x-hidden">
+          <StillNotConvinced connectFooter />
+          <Footer />
+        </div>
       </main>
-      {/* Last page: full viewport but free scroll inside so user can see all footer content */}
-      <div className="h-screen shrink-0 snap-start overflow-y-auto overflow-x-hidden">
-        <Footer />
-      </div>
     </div>
   );
 }
