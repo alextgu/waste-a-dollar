@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Your palette */
+  --color-gold: #C8963E;           /* Loonie Gold – site colour / accent */
+  --color-black: #0D0D0D;          /* Expensive Black – background and text */
+  --color-cream: #F0EDE8;          /* Cream White – background */
+  --color-white: #FFFFFF;          /* White – text */
+
+  /* Semantic (use these in components) */
+  --color-background: var(--color-black);
+  --color-foreground: var(--color-white);
+  --color-background-alt: var(--color-cream);
+  --color-brass: #262626;          /* borders / subtle */
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* BMC button – follows palette */
+  --bmc-button-color: var(--color-gold);
+  --bmc-button-outline: var(--color-black);
+  --bmc-button-font-color: var(--color-white);
+  --bmc-button-coffee-color: #FFDD00;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
