@@ -34,13 +34,13 @@ export default function BMCButton() {
         href={BMC_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="bmc-btn inline-flex min-w-[210px] items-center gap-2 rounded-xl px-6 py-0 text-left no-underline transition-opacity hover:opacity-95 focus:opacity-95"
+        className="bmc-btn inline-flex min-w-[180px] items-center gap-2 rounded-xl px-5 py-0 text-left no-underline transition-opacity hover:opacity-95 focus:opacity-95"
         style={{
           backgroundColor: "var(--bmc-button-color)",
           color: "var(--bmc-button-font-color)",
-          height: 60,
-          fontSize: "24px",
-          fontWeight: 700,
+          height: 52,
+          fontSize: "18px",
+          fontWeight: 500,
         }}
       >
         <CoffeeIcon

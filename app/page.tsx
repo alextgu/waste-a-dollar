@@ -13,7 +13,7 @@ import Footer from "./components/Footer";
 
 export default function Home() {
   return (
-    <div className="h-screen overflow-y-auto overflow-x-hidden snap-y snap-mandatory bg-[var(--color-background)]">
+    <div className="no-scrollbar h-screen overflow-y-auto overflow-x-hidden snap-y snap-mandatory bg-[var(--color-background)]">
       <Navbar />
       <main>
         <Hero />
@@ -22,7 +22,7 @@ export default function Home() {
         <Ratings />
         <FAQ />
         <Leaderboard />
-        <div className="h-screen shrink-0 snap-start overflow-y-auto overflow-x-hidden">
+        <div className="no-scrollbar h-screen shrink-0 snap-start overflow-y-auto overflow-x-hidden">
           <StillNotConvinced connectFooter />
           <Footer />
         </div>

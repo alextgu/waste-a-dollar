@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Your palette */
-  --color-gold: #C8963E;           /* Loonie Gold – site colour / accent */
+  /* Your palette (from alex.txt) */
+  --color-gold: #FFD600;           /* Aero Loonie/Gold – site colour / accent */
   --color-black: #0D0D0D;          /* Expensive Black – background and text */
   --color-cream: #F0EDE8;          /* Cream White – background */
   --color-white: #FFFFFF;          /* White – text */
@@ -13,8 +13,13 @@
   --color-background-alt: var(--color-cream);
   --color-brass: #262626;          /* borders / subtle */
 
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
+
+  /* Type scale: Header 500, Subtitles 500, Text 500 */
+  --font-weight-header: 500;
+  --font-weight-subtitle: 500;
+  --font-weight-body: 500;
 
   /* BMC button – follows palette */
   --bmc-button-color: var(--color-gold);
@@ -27,4 +32,14 @@ body {
   background: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Hide scrollbars but keep scroll behavior for elements that opt in */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
