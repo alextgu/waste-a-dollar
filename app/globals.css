@@ -21,11 +21,6 @@
   --font-weight-subtitle: 500;
   --font-weight-body: 500;
 
-  /* BMC button – follows palette */
-  --bmc-button-color: var(--color-gold);
-  --bmc-button-outline: var(--color-black);
-  --bmc-button-font-color: var(--color-white);
-  --bmc-button-coffee-color: #FFDD00;
 }
 
 body {
