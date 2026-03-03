@@ -25,7 +25,7 @@ export async function POST(request: Request) {
   }
   try {
     const body = await request.json();
-    let { email, name, amount_donated } = body;
+    const { email, name, amount_donated } = body;
 
     if (typeof email !== "string" || !email.trim()) {
       return NextResponse.json(

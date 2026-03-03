@@ -2,23 +2,24 @@ import { getDonations } from "@/lib/donations";
 
 export default async function Leaderboard() {
   const { data: donations, error } = await getDonations();
+  const hasError = Boolean(error);
 
   return (
     <section className="flex h-screen shrink-0 snap-start snap-always flex-col items-center justify-center gap-8 px-6 py-20">
       <h2 className="text-2xl font-semibold text-[var(--color-gold)]">
         Active Leaderboard
       </h2>
-      {error && (
+      {hasError && (
         <p className="text-sm text-[var(--color-foreground)]/60">
           Could not load leaderboard. Try again later.
         </p>
       )}
-      {!error && (!donations || donations.length === 0) && (
+      {!hasError && (!donations || donations.length === 0) && (
         <p className="text-sm text-[var(--color-foreground)]/60">
           No donations yet. Be the first!
         </p>
       )}
-      {!error && donations && donations.length > 0 && (
+      {!hasError && donations && donations.length > 0 && (
         <ul className="w-full max-w-md space-y-2 text-left">
           {donations.slice(0, 10).map((d, i) => (
             <li
