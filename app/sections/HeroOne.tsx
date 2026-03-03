@@ -1,28 +1,22 @@
 export default function Hero() {
   return (
-    <section className="flex h-screen shrink-0 snap-start snap-always items-center justify-center px-6 pt-24 pb-20">
+    <section
+      className="flex h-screen shrink-0 snap-start snap-always items-center justify-center bg-[var(--color-gold)] px-6 pt-24 pb-20 text-[var(--color-black)]"
+      data-bg="gold"
+    >
       <div className="mx-auto flex max-w-4xl flex-col gap-10">
-        <div className="space-y-4">
+        <div className="space-y-3">
           <h1
-            className="text-3xl sm:text-4xl text-[var(--color-gold)]"
+            className="text-4xl sm:text-5xl"
             style={{ fontWeight: "var(--font-weight-header)" }}
           >
-            Waste a Dollar
+            Waste a Dollar.
           </h1>
           <p
-            className="text-sm sm:text-base text-[var(--color-foreground)]/80"
+            className="text-[13px] sm:text-sm uppercase tracking-[0.18em] text-black/70"
             style={{ fontWeight: "var(--font-weight-subtitle)" }}
           >
-            Site palette &amp; typography — Aero Loonie Gold, Expensive Black,
-            Cream White, Inter.
-          </p>
-          <p
-            className="max-w-xl text-xs sm:text-sm text-[var(--color-foreground)]/70"
-            style={{ fontWeight: "var(--font-weight-body)" }}
-          >
-            Header: Inter 800. Subtitles: Inter 500. Body: Inter 400. This page
-            uses those weights so you can feel the tone before seeing any real
-            content.
+            an extremely serious one–dollar decision
           </p>
         </div>
 
