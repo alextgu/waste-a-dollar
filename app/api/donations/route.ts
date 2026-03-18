@@ -51,6 +51,7 @@ export async function POST(request: Request) {
       email: email.trim(),
       name: name.trim(),
       amount_donated: amount,
+      stripe_session_id: null,
     });
 
     if (error) {

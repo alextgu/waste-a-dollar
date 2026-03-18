@@ -20,8 +20,31 @@ export async function insertDonation(
       email: data.email,
       name: data.name,
       amount_donated: data.amount_donated,
+      stripe_session_id: data.stripe_session_id,
     })
-    .select("id, email, name, amount_donated, created_at")
+    .select("id, email, name, amount_donated, stripe_session_id, created_at")
+    .single();
+
+  if (error) return { data: null, error };
+  return { data: row as Donation, error: null };
+}
+
+export async function upsertDonationByStripeSession(
+  data: Omit<DonationInsert, "stripe_session_id"> & { stripe_session_id: string }
+): Promise<{ data: Donation | null; error: unknown }> {
+  const supabase = await createClient();
+  const { data: row, error } = await supabase
+    .from(TABLE)
+    .upsert(
+      {
+        email: data.email,
+        name: data.name,
+        amount_donated: data.amount_donated,
+        stripe_session_id: data.stripe_session_id,
+      },
+      { onConflict: "stripe_session_id" }
+    )
+    .select("id, email, name, amount_donated, stripe_session_id, created_at")
     .single();
 
   if (error) return { data: null, error };
@@ -42,7 +65,7 @@ export async function getDonations(): Promise<{
   const supabase = await createClient();
   const { data, error } = await supabase
     .from(TABLE)
-    .select("id, email, name, amount_donated, created_at")
+    .select("id, email, name, amount_donated, stripe_session_id, created_at")
     .order("created_at", { ascending: false });
 
   if (error) return { data: null, error };
@@ -55,7 +78,7 @@ export async function getDonationById(
   const supabase = await createClient();
   const { data, error } = await supabase
     .from(TABLE)
-    .select("id, email, name, amount_donated, created_at")
+    .select("id, email, name, amount_donated, stripe_session_id, created_at")
     .eq("id", id)
     .single();
 
@@ -76,7 +99,7 @@ export async function updateDonation(
     .from(TABLE)
     .update(update)
     .eq("id", id)
-    .select("id, email, name, amount_donated, created_at")
+    .select("id, email, name, amount_donated, stripe_session_id, created_at")
     .single();
 
   if (error) return { data: null, error };
