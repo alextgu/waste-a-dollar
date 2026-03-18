@@ -19,14 +19,14 @@ export default function GuiltSection({ onDonateClick }: GuiltSectionProps) {
   ];
 
   return (
-    <section className="bg-[#F0EDE8] py-32 text-[#0D0D0D]">
-      <div className="mx-auto max-w-7xl px-6">
+    <section className="flex h-full items-center bg-[#F0EDE8] py-12 text-[#0D0D0D] md:py-16">
+      <div className="mx-auto w-full max-w-7xl px-6">
         <motion.div
           ref={ref}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={staggerContainer}
-          className="mb-16 text-center"
+          className="mb-6 text-center md:mb-10"
         >
           <motion.p
             variants={fadeUp}
@@ -36,14 +36,14 @@ export default function GuiltSection({ onDonateClick }: GuiltSectionProps) {
           </motion.p>
           <motion.h2
             variants={fadeUp}
-            className="mb-8 text-5xl font-bold tracking-tight md:text-6xl"
+            className="mb-3 text-3xl font-bold tracking-tight md:mb-5 md:text-5xl"
             style={{ letterSpacing: "-0.03em" }}
           >
             The last time Alex received a donation:
           </motion.h2>
           <motion.div
             variants={fadeUp}
-            className="mb-16 text-8xl font-bold text-[#FFD600] md:text-9xl"
+            className="text-[clamp(3.25rem,10vw,6rem)] font-bold leading-none text-[#FFD600]"
             style={{ letterSpacing: "-0.03em" }}
           >
             Never.
@@ -54,20 +54,20 @@ export default function GuiltSection({ onDonateClick }: GuiltSectionProps) {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={staggerContainer}
-          className="mb-16 grid items-center gap-12 md:grid-cols-2"
+          className="mb-6 grid items-center gap-5 md:mb-8 md:grid-cols-2 md:gap-8"
         >
-          <motion.div variants={fadeUp} className="space-y-8">
+          <motion.div variants={fadeUp} className="space-y-4 md:space-y-8">
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className={`border p-6 ${
+                className={`border p-5 md:p-6 ${
                   stat.highlight
                     ? "border-[#FFD600] bg-[#FFD600] bg-opacity-5"
                     : "border-[rgba(255,214,0,0.15)]"
                 }`}
               >
                 <div
-                  className={`mb-2 text-4xl font-bold ${
+                  className={`mb-2 text-3xl font-bold md:text-4xl ${
                     stat.highlight ? "text-[#FFD600]" : ""
                   }`}
                 >
@@ -77,8 +77,8 @@ export default function GuiltSection({ onDonateClick }: GuiltSectionProps) {
               </div>
             ))}
 
-            <div className="pt-4">
-              <p className="text-xl font-light text-gray-800">
+            <div className="pt-0">
+              <p className="text-base font-light text-gray-800 md:text-xl">
                 The math is not complicated.
               </p>
             </div>
@@ -86,7 +86,7 @@ export default function GuiltSection({ onDonateClick }: GuiltSectionProps) {
 
           <motion.div
             variants={fadeUp}
-            className="flex aspect-video items-center justify-center border border-[rgba(255,214,0,0.15)] bg-[#F0EDE8]"
+            className="hidden aspect-video items-center justify-center border border-[rgba(255,214,0,0.15)] bg-[#F0EDE8] md:flex"
           >
             <div className="px-8 text-center">
               <div className="mb-2 text-sm font-medium text-[#FFD600]">
@@ -107,7 +107,7 @@ export default function GuiltSection({ onDonateClick }: GuiltSectionProps) {
         >
           <motion.button
             onClick={onDonateClick}
-            className="w-full bg-[#FFD600] px-12 py-5 text-xl font-medium text-[#0D0D0D] transition-shadow duration-200 hover:shadow-[0_0_30px_rgba(255,214,0,0.5)] md:w-auto"
+            className="w-full bg-[#FFD600] px-10 py-4 text-lg font-medium text-[#0D0D0D] transition-shadow duration-200 hover:shadow-[0_0_30px_rgba(255,214,0,0.5)] md:w-auto md:px-12 md:py-5 md:text-xl"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
           >

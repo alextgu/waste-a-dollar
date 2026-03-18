@@ -50,15 +50,17 @@ export default function Leaderboard() {
     });
   };
 
+  const visibleRows = data.slice(0, 8);
+
   return (
-    <section className="bg-[#F0EDE8] py-32 text-[#0D0D0D]">
-      <div className="mx-auto max-w-7xl px-6">
+    <section className="flex h-full items-center bg-[#F0EDE8] py-12 text-[#0D0D0D] md:py-16">
+      <div className="mx-auto w-full max-w-7xl px-6">
         <motion.div
           ref={ref}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={staggerContainer}
-          className="mb-16 text-center"
+          className="mb-10 text-center md:mb-12"
         >
           <motion.p
             variants={fadeUp}
@@ -68,7 +70,7 @@ export default function Leaderboard() {
           </motion.p>
           <motion.h2
             variants={fadeUp}
-            className="text-5xl font-bold tracking-tight md:text-6xl"
+            className="text-4xl font-bold tracking-tight md:text-5xl"
             style={{ letterSpacing: "-0.03em" }}
           >
             People who made the correct decision.
@@ -82,33 +84,33 @@ export default function Leaderboard() {
           className="overflow-hidden border border-[rgba(255,214,0,0.15)] bg-white"
         >
           {loading ? (
-            <div className="p-12 text-center font-light text-gray-500">
+            <div className="p-10 text-center font-light text-gray-500">
               Loading the board...
             </div>
           ) : data.length === 0 ? (
-            <motion.div variants={fadeUp} className="p-12 text-center">
+            <motion.div variants={fadeUp} className="p-10 text-center">
               <p className="text-xl font-light text-gray-700">
                 The board is empty. You could be first. Think about that.
               </p>
             </motion.div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-hidden">
               <table className="w-full">
                 <thead className="bg-[#0D0D0D] text-white">
                   <tr>
-                    <th className="px-6 py-4 text-left text-sm font-medium tracking-wide">
+                    <th className="px-5 py-3 text-left text-xs font-medium tracking-wide md:px-6 md:py-4 md:text-sm">
                       RANK
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium tracking-wide">
+                    <th className="px-5 py-3 text-left text-xs font-medium tracking-wide md:px-6 md:py-4 md:text-sm">
                       NAME
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium tracking-wide">
+                    <th className="px-5 py-3 text-left text-xs font-medium tracking-wide md:px-6 md:py-4 md:text-sm">
                       DATE DONATED
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((entry, index) => (
+                  {visibleRows.map((entry, index) => (
                     <motion.tr
                       key={`${entry.rank}-${entry.created_at}-${index}`}
                       custom={index}
@@ -119,7 +121,7 @@ export default function Leaderboard() {
                         entry.rank === 1 ? "bg-[#FFD600] bg-opacity-20" : ""
                       }`}
                     >
-                      <td className="px-6 py-4">
+                      <td className="px-5 py-3 md:px-6 md:py-4">
                         <span
                           className={`font-bold ${
                             entry.rank === 1 ? "text-xl text-[#FFD600]" : ""
@@ -128,8 +130,10 @@ export default function Leaderboard() {
                           #{entry.rank}
                         </span>
                       </td>
-                      <td className="px-6 py-4 font-medium">{entry.name}</td>
-                      <td className="px-6 py-4 font-light text-gray-600">
+                      <td className="px-5 py-3 text-sm font-medium md:px-6 md:py-4 md:text-base">
+                        {entry.name}
+                      </td>
+                      <td className="px-5 py-3 text-sm font-light text-gray-600 md:px-6 md:py-4 md:text-base">
                         {formatDate(entry.created_at)}
                       </td>
                     </motion.tr>
@@ -146,7 +150,7 @@ export default function Leaderboard() {
           transition={{ delay: 0.6, duration: 0.6 }}
           className="mt-6 text-center text-sm font-light text-gray-500"
         >
-          Updates every 30 seconds
+          Updates every 30 seconds{data.length > visibleRows.length ? " • Showing latest 8" : ""}
         </motion.p>
       </div>
     </section>

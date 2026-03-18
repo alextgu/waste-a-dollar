@@ -35,14 +35,14 @@ export default function FAQ() {
   ];
 
   return (
-    <section className="bg-[#0D0D0D] py-32 text-white">
-      <div className="mx-auto max-w-4xl px-6">
+    <section className="flex h-full items-center bg-[#0D0D0D] py-12 text-white md:py-16">
+      <div className="mx-auto w-full max-w-4xl px-6">
         <motion.div
           ref={ref}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={staggerContainer}
-          className="mb-16 text-center"
+          className="mb-10 text-center md:mb-12"
         >
           <motion.p
             variants={fadeUp}
@@ -52,7 +52,7 @@ export default function FAQ() {
           </motion.p>
           <motion.h2
             variants={fadeUp}
-            className="text-5xl font-bold tracking-tight md:text-6xl"
+            className="text-4xl font-bold tracking-tight md:text-5xl"
             style={{ letterSpacing: "-0.03em" }}
           >
             You have questions. They are reasonable.
@@ -63,7 +63,7 @@ export default function FAQ() {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={staggerContainer}
-          className="space-y-4"
+          className="space-y-3"
         >
           {faqs.map((faq, index) => (
             <motion.div
@@ -73,9 +73,11 @@ export default function FAQ() {
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="flex w-full items-center justify-between px-6 py-5 text-left transition-colors duration-200 hover:bg-[rgba(255,214,0,0.05)]"
+                className="flex w-full items-center justify-between px-5 py-4 text-left transition-colors duration-200 hover:bg-[rgba(255,214,0,0.05)] md:px-6 md:py-5"
               >
-                <span className="pr-4 text-lg font-medium">{faq.question}</span>
+                <span className="pr-4 text-base font-medium md:text-lg">
+                  {faq.question}
+                </span>
                 <motion.div
                   animate={{ rotate: openIndex === index ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
@@ -97,8 +99,8 @@ export default function FAQ() {
                     transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                     className="overflow-hidden"
                   >
-                    <div className="border-t border-[rgba(255,214,0,0.15)] px-6 pb-5 text-gray-400">
-                      <div className="pt-5 font-light leading-relaxed">
+                    <div className="border-t border-[rgba(255,214,0,0.15)] px-5 pb-4 text-gray-400 md:px-6 md:pb-5">
+                      <div className="pt-4 text-sm font-light leading-relaxed md:pt-5 md:text-base">
                         {faq.answer}
                       </div>
                     </div>

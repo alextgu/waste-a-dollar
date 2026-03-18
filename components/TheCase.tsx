@@ -24,14 +24,17 @@ export default function TheCase() {
   ];
 
   return (
-    <section id="the-case" className="bg-[#F0EDE8] py-32 text-[#0D0D0D]">
-      <div className="mx-auto max-w-7xl px-6">
+    <section
+      id="the-case"
+      className="flex h-full items-center bg-[#F0EDE8] py-12 text-[#0D0D0D] md:py-16"
+    >
+      <div className="mx-auto w-full max-w-7xl px-6">
         <motion.div
           ref={ref}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={staggerContainer}
-          className="mb-16 text-center"
+          className="mb-10 text-center md:mb-12"
         >
           <motion.p
             variants={fadeUp}
@@ -41,7 +44,7 @@ export default function TheCase() {
           </motion.p>
           <motion.h2
             variants={fadeUp}
-            className="text-5xl font-bold tracking-tight md:text-6xl"
+            className="text-4xl font-bold tracking-tight md:text-5xl"
             style={{ letterSpacing: "-0.03em" }}
           >
             Three reasons this is correct.
@@ -52,7 +55,7 @@ export default function TheCase() {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={staggerContainer}
-          className="grid gap-8 md:grid-cols-3"
+          className="grid gap-6 md:grid-cols-3"
         >
           {cards.map((card, index) => (
             <motion.div
@@ -62,9 +65,9 @@ export default function TheCase() {
               whileHover={{ y: -4 }}
             >
               <div className="h-1 bg-[#FFD600]" />
-              <div className="p-8">
+              <div className="p-6 md:p-8">
                 <h3
-                  className="mb-4 text-2xl font-bold tracking-tight"
+                  className="mb-3 text-xl font-bold tracking-tight md:text-2xl"
                   style={{ letterSpacing: "-0.03em" }}
                 >
                   {card.title}

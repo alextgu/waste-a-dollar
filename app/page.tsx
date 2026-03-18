@@ -32,24 +32,49 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen">
+    <div className="no-scrollbar h-screen overflow-y-auto overflow-x-hidden snap-y snap-mandatory bg-[#0D0D0D]">
       <Navbar onDonateClick={() => setIsDonateModalOpen(true)} />
-      <Hero
-        onDonateClick={() => setIsDonateModalOpen(true)}
-        totalDonations={totalDonations}
-      />
-      <TheCase />
-      <AboutAlex />
-      <GuiltSection onDonateClick={() => setIsDonateModalOpen(true)} />
-      <Ratings />
-      <Leaderboard />
-      <FAQ />
-      <StillNotConvinced onDonateClick={() => setIsDonateModalOpen(true)} />
-      <Footer />
+
+      <div className="no-scrollbar h-screen shrink-0 snap-start overflow-hidden">
+        <Hero
+          onDonateClick={() => setIsDonateModalOpen(true)}
+          totalDonations={totalDonations}
+        />
+      </div>
+
+      <div className="no-scrollbar h-screen shrink-0 snap-start overflow-hidden">
+        <TheCase />
+      </div>
+
+      <div className="no-scrollbar h-screen shrink-0 snap-start overflow-hidden">
+        <AboutAlex />
+      </div>
+
+      <div className="no-scrollbar h-screen shrink-0 snap-start overflow-hidden">
+        <GuiltSection onDonateClick={() => setIsDonateModalOpen(true)} />
+      </div>
+
+      <div className="no-scrollbar h-screen shrink-0 snap-start overflow-hidden">
+        <Ratings />
+      </div>
+
+      <div className="no-scrollbar h-screen shrink-0 snap-start overflow-hidden">
+        <FAQ />
+      </div>
+
+      <div className="no-scrollbar h-screen shrink-0 snap-start overflow-hidden">
+        <Leaderboard />
+      </div>
+
+      <div className="no-scrollbar h-screen shrink-0 snap-start overflow-hidden">
+        <StillNotConvinced onDonateClick={() => setIsDonateModalOpen(true)} />
+        <Footer />
+      </div>
+
       <DonateModal
         isOpen={isDonateModalOpen}
         onClose={() => setIsDonateModalOpen(false)}
       />
-    </main>
+    </div>
   );
 }

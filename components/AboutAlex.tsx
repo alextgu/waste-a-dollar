@@ -16,14 +16,14 @@ export default function AboutAlex() {
   ];
 
   return (
-    <section className="bg-[#0D0D0D] py-32 text-white">
-      <div className="mx-auto max-w-7xl px-6">
+    <section className="flex h-full items-center bg-[#0D0D0D] py-12 text-white md:py-16">
+      <div className="mx-auto w-full max-w-7xl px-6">
         <motion.div
           ref={ref}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={staggerContainer}
-          className="mb-16 text-center"
+          className="mb-10 text-center md:mb-12"
         >
           <motion.p
             variants={fadeUp}
@@ -33,7 +33,7 @@ export default function AboutAlex() {
           </motion.p>
           <motion.h2
             variants={fadeUp}
-            className="text-5xl font-bold tracking-tight md:text-6xl"
+            className="text-4xl font-bold tracking-tight md:text-5xl"
             style={{ letterSpacing: "-0.03em" }}
           >
             Alex is a person who needs a dollar.
@@ -44,20 +44,20 @@ export default function AboutAlex() {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={staggerContainer}
-          className="grid items-center gap-12 md:grid-cols-2"
+          className="grid items-center gap-10 md:grid-cols-2"
         >
           <motion.div variants={fadeUp} className="space-y-8">
             {stats.map((stat, index) => (
               <div key={index} className="border-l-2 border-[#FFD600] pl-6">
-                <div className="mb-2 text-4xl font-bold text-[#FFD600]">
+                <div className="mb-1 text-3xl font-bold text-[#FFD600] md:text-4xl">
                   {stat.value}
                 </div>
                 <div className="font-light text-gray-400">{stat.label}</div>
               </div>
             ))}
 
-            <div className="pt-8">
-              <p className="text-lg font-light leading-relaxed text-gray-300">
+            <div className="pt-4">
+              <p className="text-base font-light leading-relaxed text-gray-300 md:text-lg">
                 Alex has demonstrated a consistent pattern of spending money.
                 This continues. Your dollar would become part of that pattern.
                 This is the opportunity.

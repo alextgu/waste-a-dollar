@@ -23,14 +23,14 @@ export default function Ratings() {
   ];
 
   return (
-    <section className="bg-[#0D0D0D] py-32 text-white">
-      <div className="mx-auto max-w-7xl px-6">
+    <section className="flex h-full items-center bg-[#0D0D0D] py-12 text-white md:py-16">
+      <div className="mx-auto w-full max-w-7xl px-6">
         <motion.div
           ref={ref}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={staggerContainer}
-          className="mb-16 text-center"
+          className="mb-10 text-center md:mb-12"
         >
           <motion.p
             variants={fadeUp}
@@ -40,7 +40,7 @@ export default function Ratings() {
           </motion.p>
           <motion.h2
             variants={fadeUp}
-            className="text-5xl font-bold tracking-tight md:text-6xl"
+            className="text-4xl font-bold tracking-tight md:text-5xl"
             style={{ letterSpacing: "-0.03em" }}
           >
             People have opinions.
@@ -51,13 +51,13 @@ export default function Ratings() {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={staggerContainer}
-          className="grid gap-8 md:grid-cols-2"
+          className="grid gap-6 md:grid-cols-2"
         >
           {testimonials.map((t, index) => (
             <motion.div
               key={index}
               variants={fadeUp}
-              className="group border border-[rgba(255,214,0,0.15)] bg-[#0D0D0D] p-8 transition-all duration-300 hover:border-[#FFD600]"
+              className="group border border-[rgba(255,214,0,0.15)] bg-[#0D0D0D] p-6 transition-all duration-300 hover:border-[#FFD600] md:p-8"
               whileHover={{ y: -4 }}
             >
               <div className="mb-4 flex gap-1">
@@ -68,7 +68,7 @@ export default function Ratings() {
                   />
                 ))}
               </div>
-              <p className="mb-4 text-lg font-light leading-relaxed text-gray-300">
+              <p className="mb-4 text-base font-light leading-relaxed text-gray-300 md:text-lg">
                 &quot;{t.text}&quot;
               </p>
               <p className="text-sm font-medium text-[#FFD600]">— {t.author}</p>
