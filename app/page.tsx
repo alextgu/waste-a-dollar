@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Hero from "@/components/Hero";
-import TheCase from "@/components/TheCase";
+import WhySection from "@/components/WhySection";
 import AboutAlex from "@/components/AboutAlex";
 import GuiltSection from "@/components/GuiltSection";
 import Ratings from "@/components/Ratings";
@@ -50,36 +50,17 @@ export default function Home() {
 
   return (
     <div className="no-scrollbar h-screen overflow-y-auto overflow-x-hidden snap-y snap-mandatory bg-[#0D0D0D]">
-      {/* First snap panel is slightly taller than viewport to allow a small scroll-through graphic,
-          then snap continues to the next panel as normal. */}
-      <div className="no-scrollbar h-[120vh] shrink-0 snap-start overflow-hidden">
+      <div className="no-scrollbar h-screen shrink-0 snap-start overflow-hidden bg-[#F0EDE8]">
         <Hero
           onDonateClick={() => setIsDonateModalOpen(true)}
           videoSrc={videoSrc}
           donationCount={donationCount}
           donationTotal={donationTotal}
         />
-
-        {/* Scroll-through graphic placeholder (replace later) */}
-        <div className="mx-auto flex h-[20vh] max-w-6xl items-center justify-center px-6">
-          <div className="w-full rounded-[28px] border border-black/10 bg-white/40 px-6 py-5 backdrop-blur-sm">
-            <div className="flex items-center justify-between gap-4">
-              <div className="text-sm font-medium text-black/70">
-                Scroll a bit. There is more.
-              </div>
-              <div className="text-sm font-semibold text-[#00A862]">
-                (Graphic goes here)
-              </div>
-            </div>
-            <div className="mt-3 h-[10px] w-full overflow-hidden rounded-full bg-black/10">
-              <div className="h-full w-[35%] rounded-full bg-[#00A862]" />
-            </div>
-          </div>
-        </div>
       </div>
 
       <div className="no-scrollbar h-screen shrink-0 snap-start overflow-hidden">
-        <TheCase />
+        <WhySection />
       </div>
 
       <div className="no-scrollbar h-screen shrink-0 snap-start overflow-hidden">

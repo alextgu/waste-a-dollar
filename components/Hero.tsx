@@ -29,7 +29,7 @@ function WhyButton({ onClick }: { onClick?: () => void }) {
         onClick ??
         (() => {
           document
-            .getElementById("the-case")
+            .getElementById("why")
             ?.scrollIntoView({ behavior: "smooth" });
         })
       }
