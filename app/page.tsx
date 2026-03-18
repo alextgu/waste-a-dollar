@@ -60,7 +60,7 @@ export default function Home() {
       </div>
 
       <div className="no-scrollbar h-screen shrink-0 snap-start overflow-hidden">
-        <WhySection />
+        <WhySection onDonateClick={() => setIsDonateModalOpen(true)} />
       </div>
 
       <div className="no-scrollbar h-screen shrink-0 snap-start overflow-hidden">

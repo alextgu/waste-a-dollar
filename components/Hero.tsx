@@ -243,7 +243,7 @@ function PhoneScreen({
         <span style={{ fontSize: "14px", fontWeight: 700, color: PC.white, letterSpacing: "-0.02em", display: "block", transform: go ? "translateY(0)" : "translateY(8px)", opacity: go ? 1 : 0, transition: "transform 0.5s ease 0.2s, opacity 0.5s ease 0.2s" }}>Certificate Issued</span>
         <span style={{ fontSize: "11px", color: PC.muted, display: "block", transform: go ? "translateY(0)" : "translateY(8px)", opacity: go ? 1 : 0, transition: "transform 0.5s ease 0.3s, opacity 0.5s ease 0.3s" }}>Awarded to YOU<br />for donating $1 to Alex</span>
       </div>
-      <div style={{ padding: "7px 14px", borderRadius: "100px", background: "rgba(0,200,122,0.1)", border: "1px solid rgba(0,200,122,0.2)", fontSize: "10px", fontWeight: 600, color: PC.green, letterSpacing: "0.05em", transform: go ? "translateY(0)" : "translateY(8px)", opacity: go ? 1 : 0, transition: "transform 0.5s ease 0.4s, opacity 0.5s ease 0.4s" }}>OFFICIAL · 2025</div>
+      <div style={{ padding: "7px 14px", borderRadius: "100px", background: "rgba(0,200,122,0.1)", border: "1px solid rgba(0,200,122,0.2)", fontSize: "10px", fontWeight: 600, color: PC.green, letterSpacing: "0.05em", transform: go ? "translateY(0)" : "translateY(8px)", opacity: go ? 1 : 0, transition: "transform 0.5s ease 0.4s, opacity 0.5s ease 0.4s" }}>OFFICIAL · 2026</div>
     </div>
   );
 }
@@ -401,6 +401,7 @@ export default function Hero({
   const [lineIdx, setLineIdx]       = useState(0);
   const [trigger, setTrigger]       = useState(0);
   const [txtVisible, setTxtVisible] = useState(true);
+  const [meme67RunId, setMeme67RunId] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => { setTimeout(() => setMounted(true), 80); }, []);
@@ -447,6 +448,22 @@ export default function Hero({
           0%,100% { transform:translate(0,0) scale(1); }
           40%     { transform:translate(-2%,5%) scale(1.08); }
           80%     { transform:translate(3%,-2%) scale(0.95); }
+        }
+
+        /* 67 meme: 6 goes up while 7 goes down, repeat 6 times. */
+        @keyframes memeSix {
+          0%   { transform: translateY(0); }
+          25%  { transform: translateY(-10px); }
+          50%  { transform: translateY(0); }
+          75%  { transform: translateY(10px); }
+          100% { transform: translateY(0); }
+        }
+        @keyframes memeSeven {
+          0%   { transform: translateY(0); }
+          25%  { transform: translateY(10px); }
+          50%  { transform: translateY(0); }
+          75%  { transform: translateY(-10px); }
+          100% { transform: translateY(0); }
         }
       `}</style>
 
@@ -532,7 +549,42 @@ export default function Hero({
               Donate $1 Now
             </button>
             <WhyButton />
-            <span style={{ fontSize: "12px", color: C.muted, paddingLeft: "4px" }}>Takes 6-7 seconds. No account needed.</span>
+            <button
+              type="button"
+              onClick={() => setMeme67RunId((v) => v + 1)}
+              style={{
+                fontSize: "12px",
+                color: C.muted,
+                paddingLeft: "4px",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                textAlign: "left",
+              }}
+              aria-label="Animate 6 and 7"
+            >
+              Takes{" "}
+              <span
+                key={`six-${meme67RunId}`}
+                style={{
+                  display: "inline-block",
+                  animation: "memeSix 0.38s linear 0s 6",
+                }}
+              >
+                6
+              </span>
+              -
+              <span
+                key={`seven-${meme67RunId}`}
+                style={{
+                  display: "inline-block",
+                  animation: "memeSeven 0.38s linear 0s 6",
+                }}
+              >
+                7
+              </span>{" "}
+              seconds. No account needed.
+            </button>
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "9px", animation: mounted ? "fadeIn 0.8s ease 1.4s both" : "none", opacity: mounted ? undefined : 0 }}>
