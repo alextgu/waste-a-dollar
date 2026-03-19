@@ -256,27 +256,21 @@ export default function GuiltSection({ onDonateClick }: GuiltSectionProps) {
   })();
 
   const rotatingBadPurchases = [
-    { value: "$4.50", label: "Unused coffee you didn’t need" },
+    { value: "$4.50", label: "Expensive coffee that you could have made at home" },
     { value: "$14.99", label: "Streaming subscription you forgot existed" },
-    { value: "$9.99", label: "Premium app you never opened (once)" },
-    { value: "$7.49", label: "Snack box you regretted 48 hours later" },
+    { value: "$22.50", label: "Uber Eats delivery fees on a $12 meal" },
     { value: "$30.00", label: "Gym membership that you never use" },
-    { value: "$A lot", label: "A one-time impulse buy you can’t justify" },
     { value: "$65.00", label: "That Costco Membership" },
-
     { value: "$12.00", label: "Expired fruits in your fridge" },
     { value: "$45.00", label: "Fast fashion for that one holiday party"},
     { value: "$19.99", label: "Hardcover book that looks smart but remains unread" },
     { value: "$85.00", label: "Supplies for a craft hobby you abandoned on day two" },
-
-    { value: "$22.50", label: "Uber Eats delivery fees on a $12 meal" },
-    { value: "$3.00", label: "Plastic water bottle because you forgot your Yeti at home" },
+    { value: "$3.00", label: "Plastic water bottles..."},
     { value: "$15.00", label: "Late fee for a bill you actually had the money to pay" },
     { value: "$60.00", label: "New video game you played for exactly 42 minutes" },
     { value: "$4.99", label: "In-app currency for a game you deleted a week later" },
-    { value: "$2.99", label: "Renting a movie you fell asleep during the opening credits of" },
     { value: "$Too much", label: "Rounds of drinks for people you don't even really like" },
-    { value: "$18.00", label: "Airport sandwich that tasted like cardboard" },
+    { value: "$18.00", label: "Airport sandwich that tasted like cardboard" }
   ] as const;
 
   const fixedDollar = {
@@ -287,15 +281,27 @@ export default function GuiltSection({ onDonateClick }: GuiltSectionProps) {
 
   const [rotA, setRotA] = useState(0);
   const [rotB, setRotB] = useState(1);
+  const [rotTurn, setRotTurn] = useState<"a" | "b">("a");
 
   useEffect(() => {
     const id = setInterval(() => {
-      setRotA((prev) => (prev + 1) % rotatingBadPurchases.length);
-      setRotB((prev) => (prev + 1) % rotatingBadPurchases.length);
-    }, 2600);
+      if (rotTurn === "a") {
+        setRotA((prev) => {
+          const next = (prev + 1) % rotatingBadPurchases.length;
+          return next === rotB ? (next + 1) % rotatingBadPurchases.length : next;
+        });
+        setRotTurn("b");
+      } else {
+        setRotB((prev) => {
+          const next = (prev + 1) % rotatingBadPurchases.length;
+          return next === rotA ? (next + 1) % rotatingBadPurchases.length : next;
+        });
+        setRotTurn("a");
+      }
+    }, 1300);
     return () => clearInterval(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [rotA, rotB, rotTurn]);
 
   const rotItemA = rotatingBadPurchases[rotA] ?? rotatingBadPurchases[0];
   const rotItemB = rotatingBadPurchases[rotB] ?? rotatingBadPurchases[1] ?? rotatingBadPurchases[0];
@@ -349,12 +355,6 @@ export default function GuiltSection({ onDonateClick }: GuiltSectionProps) {
             >
               {fmt}
             </motion.div>
-
-            <div style={{ fontSize: "12px", color: "rgba(13,13,13,0.45)", marginTop: "-18px", marginBottom: "clamp(20px, 3vh, 30px)" }}>
-              {sinceLabel === "since-last"
-                ? "since the last donation"
-                : "since the site launched"}
-            </div>
 
             {/* Stats */}
             <div
