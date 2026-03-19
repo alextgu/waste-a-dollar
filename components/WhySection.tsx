@@ -15,22 +15,39 @@ type ViewState = "before" | "visible" | "exited";
 
 function useViewState(ref: React.RefObject<Element>): ViewState {
   const [state, setState] = useState<ViewState>("before");
-  const hasEntered = useRef(false);
+
   useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
-          hasEntered.current = true;
-          setState("visible");
-        } else if (hasEntered.current) {
-          setState("exited");
-        }
-      },
-      { threshold: 0.1 }
-    );
-    obs.observe(el); return () => obs.disconnect();
+    const el = ref.current;
+    if (!el) return;
+
+    // Use the snap-scroll container if present (more reliable than DOM walking).
+    const getScrollParent = (): Element => {
+      return document.getElementById("snap-container") ?? document.documentElement;
+    };
+
+    const check = () => {
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const centre = rect.top + rect.height / 2;
+      if (centre >= 0 && centre <= vh) {
+        setState("visible");
+      } else if (rect.bottom < 0) {
+        setState("exited");
+      } else {
+        setState("before");
+      }
+    };
+
+    const scrollEl = getScrollParent();
+    check();
+    scrollEl.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("scroll", check, { passive: true });
+    return () => {
+      scrollEl.removeEventListener("scroll", check);
+      window.removeEventListener("scroll", check);
+    };
   }, [ref]);
+
   return state;
 }
 
@@ -353,10 +370,15 @@ export default function WhySection({ onDonateClick }: { onDonateClick?: () => vo
   const viewState = useViewState(secRef);
   const inView = viewState === "visible";
   const [active, setActive] = useState<number | null>(null);
-  // Randomise exit direction once per mount — 50/50 left or right per card
-  const exitDirs = useRef<(1 | -1)[]>(
-    [0, 1, 2].map(() => (Math.random() < 0.5 ? 1 : -1)) as (1 | -1)[]
-  );
+  // Exit directions (deterministic; avoid Math.random during render)
+  const exitDirs: (1 | -1)[] = [1, -1, 1];
+
+  // Close any open card when scrolling away
+  useEffect(() => {
+    if (viewState === "visible") return;
+    const id = setTimeout(() => setActive(null), 0);
+    return () => clearTimeout(id);
+  }, [viewState]);
 
   useEffect(() => {
     const h = (e: KeyboardEvent) => { if (e.key === "Escape") setActive(null); };
@@ -365,9 +387,9 @@ export default function WhySection({ onDonateClick }: { onDonateClick?: () => vo
   }, []);
 
   const cards = [
-    { num: "01", title: "Be in the 99th percentile.", sub: "Only 1% of visitors ever donate." },
-    { num: "02", title: "Collect a trading card.",    sub: "5 rarities. Assigned at random."  },
-    { num: "03", title: "Your name on the board.",   sub: "Visible to everyone. Forever."    },
+    { num: "01", title: "Be in the 99th percentile.", sub: "Less than 1% of visitors donate." },
+    { num: "02", title: "Receive a certificate.",    sub: "In the form of a trading card of 5 rarities."  },
+    { num: "03", title: "Dollar leaderboard.",   sub: "Top donator will get a personal shoutout from Alex."},
   ];
 
   return (
@@ -448,7 +470,7 @@ export default function WhySection({ onDonateClick }: { onDonateClick?: () => vo
                 active={active === i}
                 dimmed={active !== null && active !== i}
                 viewState={viewState}
-                exitDir={exitDirs.current[i]}
+                exitDir={exitDirs[i]}
                 delay={0.1 + i * 0.12}
                 onOpen={() => setActive(i)}
                 onClose={() => setActive(null)}

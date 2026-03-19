@@ -102,6 +102,22 @@ export async function getDonationTotal(): Promise<{
   return { total: typeof sum === "number" && Number.isFinite(sum) ? sum : 0, error: null };
 }
 
+export async function getLatestDonationCreatedAt(): Promise<{
+  created_at: string | null;
+  error: unknown;
+}> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from(TABLE)
+    .select("created_at")
+    .order("created_at", { ascending: false })
+    .limit(1);
+
+  if (error) return { created_at: null, error };
+  const row = Array.isArray(data) ? (data[0] as { created_at?: unknown } | undefined) : undefined;
+  return { created_at: typeof row?.created_at === "string" ? row.created_at : null, error: null };
+}
+
 export async function getDonationById(
   id: string
 ): Promise<{ data: Donation | null; error: unknown }> {
