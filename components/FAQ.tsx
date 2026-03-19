@@ -1,115 +1,230 @@
 "use client";
 
-import { AnimatePresence, motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence, Variants } from "framer-motion";
 import { useRef, useState } from "react";
-import { Minus, Plus } from "lucide-react";
-import { fadeUp, staggerContainer } from "@/lib/animations";
 
-export default function FAQ() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+const GREEN = "#00A862";
+const BLACK = "#0D0D0D";
 
-  const faqs = [
-    {
-      question: "Why should I give you a dollar?",
-      answer: "Because you have one. Alex does not. This is the entire situation.",
-    },
-    {
-      question: "What do I get?",
-      answer: "A certificate. Leaderboard placement. The knowledge that you did something today.",
-    },
-    {
-      question: "Is this legitimate?",
-      answer: "Yes. It is one dollar. There is nothing to illegitimate.",
-    },
-    { question: "What if I want my dollar back?", answer: "You don't." },
-    {
-      question: "What is Alex going to do with the dollar?",
-      answer: "Spend it. Probably immediately.",
-    },
-    {
-      question: "Is there a minimum donation?",
-      answer: "Yes. One dollar. There is also a maximum. It is one dollar.",
-    },
-  ];
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 + i * 0.08 },
+  }),
+};
+
+const faqs = [
+  {
+    q: "Is this a legitimate website?",
+    a: "Yes. It is a website. It exists on the internet. You are on it right now.",
+  },
+  {
+    q: "Where does the money go?",
+    a: "To Alex. Currently there is no processing fee (first 1000 dollars are free for stripe).",
+  },
+  {
+    q: "What do I get in return?",
+    a: "Its a donation, but due to Alex's generosity, he will provide you a certificate of where your dollar went in the form of a trading card (emailed directly to you).",
+  },
+  {
+    q: "Is the trading card a real physical card?",
+    a: "No. It is a digital certificate, but Alex put a lot of work into it.",
+  },
+  {
+    q: "What if I don't donate?",
+    a: "Nothing happens.",
+  },
+  {
+    q: "Why should I trust Alex?",
+    a: "IDK, ask him yourself.",
+  },
+  {
+    q: "Can I donate more than $1?",
+    a: "Finally a good question. Yes, just customize the amount on stripe.",
+  },
+  {
+    q: "Is there a refund policy?",
+    a: "No.",
+  },
+];
+
+// ── FAQ ITEM ──────────────────────────────────────────────────────────────────
+function FAQItem({
+  q,
+  a,
+  index,
+  isInView,
+  isOpen,
+  onToggle,
+}: {
+  q: string;
+  a: string;
+  index: number;
+  isInView: boolean;
+  isOpen: boolean;
+  onToggle: (index: number) => void;
+}) {
 
   return (
-    <section className="bg-[#0D0D0D] py-32 text-white">
-      <div className="mx-auto max-w-4xl px-6">
-        <motion.div
-          ref={ref}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={staggerContainer}
-          className="mb-16 text-center"
-        >
-          <motion.p
-            variants={fadeUp}
-            className="mb-4 text-sm font-medium tracking-wide text-[#FFD600]"
-          >
-            FREQUENTLY ASKED QUESTIONS
-          </motion.p>
-          <motion.h2
-            variants={fadeUp}
-            className="text-5xl font-bold tracking-tight md:text-6xl"
-            style={{ letterSpacing: "-0.03em" }}
-          >
-            You have questions. They are reasonable.
-          </motion.h2>
-        </motion.div>
+    <motion.div
+      custom={index}
+      variants={fadeUp}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+    >
+      <button
+        onClick={() => onToggle(index)}
+        style={{
+          width: "100%",
+          background: "none",
+          border: "none",
+          padding: "20px 0",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "16px",
+          cursor: "pointer",
+          textAlign: "left",
+        }}
+      >
+        <span style={{
+          fontSize: "clamp(14px, 1.6vw, 16px)",
+          fontWeight: 600,
+          color: isOpen ? "#fff" : "rgba(255,255,255,0.75)",
+          letterSpacing: "-0.01em",
+          lineHeight: 1.3,
+          fontFamily: "Inter, sans-serif",
+          transition: "color 0.25s ease",
+        }}>
+          {q}
+        </span>
 
+        {/* Plus / minus icon */}
         <motion.div
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={staggerContainer}
-          className="space-y-4"
+          animate={{ rotate: isOpen ? 45 : 0 }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          style={{
+            width: "28px", height: "28px", flexShrink: 0,
+            borderRadius: "50%",
+            border: `1px solid ${isOpen ? GREEN : "rgba(255,255,255,0.12)"}`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            transition: "border-color 0.25s ease",
+          }}
         >
-          {faqs.map((faq, index) => (
-            <motion.div
-              key={index}
-              variants={fadeUp}
-              className="overflow-hidden border border-[rgba(255,214,0,0.15)]"
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <line x1="5" y1="0" x2="5" y2="10" stroke={isOpen ? GREEN : "rgba(255,255,255,0.5)"} strokeWidth="1.5" strokeLinecap="round" style={{ transition: "stroke 0.25s ease" }} />
+            <line x1="0" y1="5" x2="10" y2="5" stroke={isOpen ? GREEN : "rgba(255,255,255,0.5)"} strokeWidth="1.5" strokeLinecap="round" style={{ transition: "stroke 0.25s ease" }} />
+          </svg>
+        </motion.div>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            key="answer"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            style={{ overflow: "hidden" }}
+          >
+            <p style={{
+              fontSize: "14px",
+              color: "rgba(255,255,255,0.4)",
+              lineHeight: 1.75,
+              fontWeight: 300,
+              paddingBottom: "20px",
+              fontFamily: "Inter, sans-serif",
+              maxWidth: "680px",
+            }}>
+              {a}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
+// ── MAIN ──────────────────────────────────────────────────────────────────────
+export default function FAQ() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const toggle = (index: number) => {
+    setOpenIndex((prev) => (prev === index ? null : index));
+  };
+
+  return (
+    <section
+      ref={ref}
+      style={{
+        background: BLACK,
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        fontFamily: "Inter, sans-serif",
+        overflow: "hidden",
+        position: "relative",
+        boxSizing: "border-box",
+        padding: "0 clamp(24px, 6vw, 80px)",
+      }}
+    >
+      <div style={{ maxWidth: "1100px", width: "100%", margin: "0 auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1.8fr", gap: "clamp(40px, 6vw, 96px)", alignItems: "start" }}>
+
+          {/* ── Left: sticky header ── */}
+          <div style={{ position: "sticky", top: 0 }}>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: GREEN, marginBottom: "14px" }}
             >
-              <button
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="flex w-full items-center justify-between px-6 py-5 text-left transition-colors duration-200 hover:bg-[rgba(255,214,0,0.05)]"
-              >
-                <span className="pr-4 text-lg font-medium">{faq.question}</span>
-                <motion.div
-                  animate={{ rotate: openIndex === index ? 180 : 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {openIndex === index ? (
-                    <Minus className="h-5 w-5 text-[#FFD600]" />
-                  ) : (
-                    <Plus className="h-5 w-5 text-[#FFD600]" />
-                  )}
-                </motion.div>
-              </button>
+              FAQ
+            </motion.p>
 
-              <AnimatePresence>
-                {openIndex === index && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-                    className="overflow-hidden"
-                  >
-                    <div className="border-t border-[rgba(255,214,0,0.15)] px-6 pb-5 text-gray-400">
-                      <div className="pt-5 font-light leading-relaxed">
-                        {faq.answer}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
-        </motion.div>
+            <motion.h2
+              initial={{ opacity: 0, y: 16 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
+              style={{ fontSize: "clamp(28px, 4vw, 52px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 0.95, color: "#fff", marginBottom: "20px" }}
+            >
+              Questions<br />
+              <span style={{ color: GREEN }}>answered.</span>
+            </motion.h2>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : {}}
+              transition={{ duration: 0.6, delay: 0.25 }}
+              style={{ fontSize: "13px", color: "rgba(255,255,255,0.3)", lineHeight: 1.7, fontWeight: 300 }}
+            >
+              Not sure why you&apos;re here, its just a dollar, but here are some answers.
+            </motion.p>
+          </div>
+
+          {/* ── Right: accordion ── */}
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+            {faqs.map((faq, i) => (
+              <FAQItem
+                key={i}
+                q={faq.q}
+                a={faq.a}
+                index={i}
+                isInView={isInView}
+                isOpen={openIndex === i}
+                onToggle={toggle}
+              />
+            ))}
+          </div>
+
+        </div>
       </div>
     </section>
   );
 }
-

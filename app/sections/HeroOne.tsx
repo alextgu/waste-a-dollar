@@ -10,7 +10,7 @@ export default function Hero() {
             className="text-4xl sm:text-5xl"
             style={{ fontWeight: "var(--font-weight-header)" }}
           >
-            Waste a Dollar.
+            waste a dollar.
           </h1>
           <p
             className="text-[13px] sm:text-sm uppercase tracking-[0.18em] text-black/70"
