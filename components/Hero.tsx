@@ -377,7 +377,7 @@ function WarmBackground() {
 
 // ── HEADLINES ─────────────────────────────────────────────────────────────────
 const LINES = [
-  "Waste a dollar.\nFor Alex.",
+  "waste a dollar.\nFor Alex.",
   "You were going\nto waste it\nanyway.",
   "One dollar.\nThat's it.",
   "The financially\nresponsible\nchoice.",

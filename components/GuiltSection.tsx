@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView, Variants } from "framer-motion";
+import { AnimatePresence, motion, useInView, Variants } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 
 const GREEN = "#00A862";
@@ -177,7 +177,7 @@ function DiagonalVideoFrame({ isInView }: { isInView: boolean }) {
       >
         <div style={{ width: "3px", height: "3px", borderRadius: "50%", background: GREEN, flexShrink: 0 }} />
         <span style={{ fontSize: "11px", color: "rgba(13,13,13,0.35)", fontWeight: 400 }}>
-          Where your guilt is going towards
+          Please please please please please please please
         </span>
       </motion.div>
     </div>
@@ -255,11 +255,50 @@ export default function GuiltSection({ onDonateClick }: GuiltSectionProps) {
     return days > 0 ? `${days}d ${hh}:${mm}:${ss}` : `${hh}:${mm}:${ss}`;
   })();
 
-  const stats = [
-    { value: "$4.50",  label: "Average cost of a coffee you didn't need"  },
-    { value: "$14.99", label: "Your unused streaming subscription"          },
-    { value: "$1.00",  label: "What Alex is asking for", highlight: true    },
-  ];
+  const rotatingBadPurchases = [
+    { value: "$4.50", label: "Unused coffee you didn’t need" },
+    { value: "$14.99", label: "Streaming subscription you forgot existed" },
+    { value: "$9.99", label: "Premium app you never opened (once)" },
+    { value: "$7.49", label: "Snack box you regretted 48 hours later" },
+    { value: "$30.00", label: "Gym membership that you never use" },
+    { value: "$A lot", label: "A one-time impulse buy you can’t justify" },
+    { value: "$65.00", label: "That Costco Membership" },
+
+    { value: "$12.00", label: "Expired fruits in your fridge" },
+    { value: "$45.00", label: "Fast fashion for that one holiday party"},
+    { value: "$19.99", label: "Hardcover book that looks smart but remains unread" },
+    { value: "$85.00", label: "Supplies for a craft hobby you abandoned on day two" },
+
+    { value: "$22.50", label: "Uber Eats delivery fees on a $12 meal" },
+    { value: "$3.00", label: "Plastic water bottle because you forgot your Yeti at home" },
+    { value: "$15.00", label: "Late fee for a bill you actually had the money to pay" },
+    { value: "$60.00", label: "New video game you played for exactly 42 minutes" },
+    { value: "$4.99", label: "In-app currency for a game you deleted a week later" },
+    { value: "$2.99", label: "Renting a movie you fell asleep during the opening credits of" },
+    { value: "$Too much", label: "Rounds of drinks for people you don't even really like" },
+    { value: "$18.00", label: "Airport sandwich that tasted like cardboard" },
+  ] as const;
+
+  const fixedDollar = {
+    value: "$1.00",
+    label: "What Alex is asking for",
+    highlight: true as const,
+  };
+
+  const [rotA, setRotA] = useState(0);
+  const [rotB, setRotB] = useState(1);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setRotA((prev) => (prev + 1) % rotatingBadPurchases.length);
+      setRotB((prev) => (prev + 1) % rotatingBadPurchases.length);
+    }, 2600);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const rotItemA = rotatingBadPurchases[rotA] ?? rotatingBadPurchases[0];
+  const rotItemB = rotatingBadPurchases[rotB] ?? rotatingBadPurchases[1] ?? rotatingBadPurchases[0];
 
   return (
     <section
@@ -290,7 +329,7 @@ export default function GuiltSection({ onDonateClick }: GuiltSectionProps) {
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: GREEN, marginBottom: "14px" }}
             >
-              Consider this
+              Alex is sad.
             </motion.p>
 
             <motion.h2
@@ -318,47 +357,198 @@ export default function GuiltSection({ onDonateClick }: GuiltSectionProps) {
             </div>
 
             {/* Stats */}
-            <div style={{ display: "flex", flexDirection: "column", marginBottom: "clamp(18px, 2.5vh, 28px)" }}>
-              {stats.map((stat, i) => (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginBottom: "clamp(18px, 2.5vh, 28px)",
+              }}
+            >
+              {/* Rotating bad purchase A */}
+              <AnimatePresence initial={false} mode="popLayout">
                 <motion.div
-                  key={i}
-                  custom={i}
+                  key={rotItemA.label}
+                  custom={0}
                   variants={flipVariants}
                   initial="hidden"
                   animate={isInView ? "visible" : "hidden"}
+                  exit={{
+                    opacity: 0,
+                    rotateX: 40,
+                    transition: { duration: 0.25, ease: "easeOut" },
+                  }}
                   style={{
+                    position: "relative",
                     perspective: "600px",
-                    borderLeft: `2px solid ${stat.highlight ? GREEN : "rgba(13,13,13,0.1)"}`,
-                    background: stat.highlight ? "rgba(0,168,98,0.05)" : "transparent",
+                    borderLeft: `2px solid rgba(13,13,13,0.1)`,
+                    background: "transparent",
                     paddingLeft: "18px",
                     paddingTop: "11px",
                     paddingBottom: "11px",
                     paddingRight: "12px",
-                    borderBottom: i < stats.length - 1 ? "1px solid rgba(13,13,13,0.06)" : "none",
+                    borderBottom: "1px solid rgba(13,13,13,0.06)",
                   }}
                 >
-                  <div style={{
-                    fontSize: "clamp(18px, 2.2vw, 26px)", fontWeight: 900,
-                    letterSpacing: "-0.04em", lineHeight: 1, marginBottom: "3px",
-                    color: stat.highlight ? GREEN : BLACK,
-                  }}>
-                    {stat.value}
+                  {/* Strikethrough on exit only */}
+                  <motion.div
+                    style={{
+                      position: "absolute",
+                      left: "14px",
+                      right: "12px",
+                      top: "50%",
+                      height: "2px",
+                      background: "rgba(13,13,13,0.25)",
+                      transformOrigin: "left center",
+                      borderRadius: "999px",
+                    }}
+                    initial={{ scaleX: 0, opacity: 0 }}
+                    animate={{ scaleX: 0, opacity: 0 }}
+                    exit={{
+                      scaleX: 1,
+                      opacity: 1,
+                      transition: { duration: 0.28, ease: "easeOut" },
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      fontSize: "clamp(18px, 2.2vw, 26px)",
+                      fontWeight: 900,
+                      letterSpacing: "-0.04em",
+                      lineHeight: 1,
+                      marginBottom: "3px",
+                      color: BLACK,
+                    }}
+                  >
+                    {rotItemA.value}
                   </div>
-                  <div style={{ fontSize: "11px", color: "rgba(13,13,13,0.4)", fontWeight: 400, lineHeight: 1.4 }}>
-                    {stat.label}
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      color: "rgba(13,13,13,0.4)",
+                      fontWeight: 400,
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {rotItemA.label}
                   </div>
                 </motion.div>
-              ))}
-            </div>
+              </AnimatePresence>
 
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : {}}
-              transition={{ duration: 0.6, delay: 0.85 }}
-              style={{ fontSize: "13px", color: "rgba(13,13,13,0.4)", lineHeight: 1.7, fontWeight: 300, marginBottom: "clamp(18px, 2.5vh, 28px)" }}
-            >
-              The math is not complicated.
-            </motion.p>
+              {/* Rotating bad purchase B */}
+              <AnimatePresence initial={false} mode="popLayout">
+                <motion.div
+                  key={rotItemB.label}
+                  custom={1}
+                  variants={flipVariants}
+                  initial="hidden"
+                  animate={isInView ? "visible" : "hidden"}
+                  exit={{
+                    opacity: 0,
+                    rotateX: 40,
+                    transition: { duration: 0.25, ease: "easeOut" },
+                  }}
+                  style={{
+                    position: "relative",
+                    perspective: "600px",
+                    borderLeft: `2px solid rgba(13,13,13,0.1)`,
+                    background: "transparent",
+                    paddingLeft: "18px",
+                    paddingTop: "11px",
+                    paddingBottom: "11px",
+                    paddingRight: "12px",
+                    borderBottom: "1px solid rgba(13,13,13,0.06)",
+                  }}
+                >
+                  {/* Strikethrough on exit only */}
+                  <motion.div
+                    style={{
+                      position: "absolute",
+                      left: "14px",
+                      right: "12px",
+                      top: "50%",
+                      height: "2px",
+                      background: "rgba(13,13,13,0.25)",
+                      transformOrigin: "left center",
+                      borderRadius: "999px",
+                    }}
+                    initial={{ scaleX: 0, opacity: 0 }}
+                    animate={{ scaleX: 0, opacity: 0 }}
+                    exit={{
+                      scaleX: 1,
+                      opacity: 1,
+                      transition: { duration: 0.28, ease: "easeOut" },
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      fontSize: "clamp(18px, 2.2vw, 26px)",
+                      fontWeight: 900,
+                      letterSpacing: "-0.04em",
+                      lineHeight: 1,
+                      marginBottom: "3px",
+                      color: BLACK,
+                    }}
+                  >
+                    {rotItemB.value}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      color: "rgba(13,13,13,0.4)",
+                      fontWeight: 400,
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {rotItemB.label}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Fixed $1 card (always visible) */}
+              <motion.div
+                custom={2}
+                variants={flipVariants}
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
+                style={{
+                  perspective: "600px",
+                  borderLeft: `2px solid ${fixedDollar.highlight ? GREEN : "rgba(13,13,13,0.1)"}`,
+                  background: fixedDollar.highlight
+                    ? "rgba(0,168,98,0.05)"
+                    : "transparent",
+                  paddingLeft: "18px",
+                  paddingTop: "11px",
+                  paddingBottom: "11px",
+                  paddingRight: "12px",
+                  borderBottom: "none",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "clamp(18px, 2.2vw, 26px)",
+                    fontWeight: 900,
+                    letterSpacing: "-0.04em",
+                    lineHeight: 1,
+                    marginBottom: "3px",
+                    color: fixedDollar.highlight ? GREEN : BLACK,
+                  }}
+                >
+                  {fixedDollar.value}
+                </div>
+                <div
+                  style={{
+                    fontSize: "11px",
+                    color: "rgba(13,13,13,0.4)",
+                    fontWeight: 400,
+                    lineHeight: 1.4,
+                  }}
+                >
+                  {fixedDollar.label}
+                </div>
+              </motion.div>
+            </div>
 
             {/* CTA */}
             <motion.div

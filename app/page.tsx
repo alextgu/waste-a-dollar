@@ -172,7 +172,7 @@ export default function Home() {
       <div
         data-snap-section
         data-snap-index="7"
-        className="no-scrollbar h-screen shrink-0 snap-start overflow-hidden"
+        className="no-scrollbar min-h-screen shrink-0 snap-start overflow-y-auto overflow-x-hidden"
       >
         <StillNotConvinced onDonateClick={() => setIsDonateModalOpen(true)} />
         <Footer />

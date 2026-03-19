@@ -2,52 +2,71 @@
 
 import { motion } from "framer-motion";
 
+const GREEN = "#00A862";
+const BLACK = "#0D0D0D";
+const BG    = "#F0EDE8";
+
+function FooterLink({ label, href }: { label: string; href: string }) {
+  return (
+    <motion.a
+      href={href}
+      whileHover={{ y: -1 }}
+      style={{
+        fontSize: "12px",
+        color: "rgba(13,13,13,0.35)",
+        fontWeight: 400,
+        textDecoration: "none",
+        fontFamily: "Inter, sans-serif",
+        transition: "color 0.2s ease",
+      }}
+      onMouseEnter={e => (e.currentTarget.style.color = GREEN)}
+      onMouseLeave={e => (e.currentTarget.style.color = "rgba(13,13,13,0.35)")}
+    >
+      {label}
+    </motion.a>
+  );
+}
+
 export default function Footer() {
   return (
-    <footer className="border-t border-[#FFD600] bg-[#0D0D0D] py-12 text-white">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-          <motion.div
-            className="text-xl font-bold tracking-tight text-[#FFD600]"
-            style={{ letterSpacing: "-0.03em" }}
-            whileHover={{ scale: 1.05 }}
-          >
-            waste a dollar.
-          </motion.div>
+    <footer style={{
+      background: BG,
+      borderTop: "1px solid rgba(13,13,13,0.07)",
+      fontFamily: "Inter, sans-serif",
+      padding: "32px clamp(24px, 6vw, 80px)",
+    }}>
+      <div style={{
+        maxWidth: "1100px",
+        margin: "0 auto",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        flexWrap: "wrap",
+        gap: "16px",
+      }}>
 
-          <div className="text-center font-light text-gray-400">
-            © {new Date().getFullYear()} Alex. All dollars reserved.
-          </div>
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          style={{ fontSize: "16px", fontWeight: 900, letterSpacing: "-0.04em", color: GREEN, cursor: "default" }}
+        >
+          waste a dollar.
+        </motion.div>
 
-          <div className="flex gap-6 text-sm">
-            <motion.a
-              href="#"
-              className="group relative font-light text-gray-400 transition-colors hover:text-[#FFD600]"
-              whileHover={{ y: -2 }}
-            >
-              Privacy
-              <span className="absolute bottom-0 left-0 h-px w-0 bg-[#FFD600] transition-all duration-300 group-hover:w-full" />
-            </motion.a>
-            <motion.a
-              href="#"
-              className="group relative font-light text-gray-400 transition-colors hover:text-[#FFD600]"
-              whileHover={{ y: -2 }}
-            >
-              Contact
-              <span className="absolute bottom-0 left-0 h-px w-0 bg-[#FFD600] transition-all duration-300 group-hover:w-full" />
-            </motion.a>
-            <motion.a
-              href="#"
-              className="group relative font-light text-gray-400 transition-colors hover:text-[#FFD600]"
-              whileHover={{ y: -2 }}
-            >
-              Certificate Portal
-              <span className="absolute bottom-0 left-0 h-px w-0 bg-[#FFD600] transition-all duration-300 group-hover:w-full" />
-            </motion.a>
+        <p style={{ fontSize: "11px", color: "rgba(13,13,13,0.3)", fontWeight: 300 }}>
+          © {new Date().getFullYear()} Alex. All dollars reserved.
+        </p>
+
+        <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+          {["Privacy", "Terms", "Contact", "Certificate Portal"].map(l => (
+            <FooterLink key={l} label={l} href="#" />
+          ))}
+          <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+            <div style={{ width: "5px", height: "5px", borderRadius: "50%", background: GREEN }} />
+            <span style={{ fontSize: "11px", color: GREEN, fontWeight: 600 }}>Operational</span>
           </div>
         </div>
+
       </div>
     </footer>
   );
 }
-
