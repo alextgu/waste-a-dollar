@@ -9,11 +9,46 @@ interface NavbarProps {
 
 export default function Navbar({ onDonateClick }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
+  const [isLeaderboardSection, setIsLeaderboardSection] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const root = document.getElementById("snap-container");
+    if (!root) return;
+
+    const sections = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-snap-section][data-snap-index]")
+    );
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        let best: { idx: number; ratio: number } | null = null;
+        for (const entry of entries) {
+          const idxAttr = (entry.target as HTMLElement).getAttribute(
+            "data-snap-index"
+          );
+          const idx = idxAttr ? Number(idxAttr) : NaN;
+          if (!Number.isFinite(idx)) continue;
+          if (!best || entry.intersectionRatio > best.ratio) {
+            best = { idx, ratio: entry.intersectionRatio };
+          }
+        }
+        if (best) setIsLeaderboardSection(best.idx === 6);
+      },
+      {
+        root,
+        threshold: [0.45, 0.65, 0.85],
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -27,8 +62,10 @@ export default function Navbar({ onDonateClick }: NavbarProps) {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <motion.div
-          className="text-xl font-bold tracking-tight text-[#FFD600]"
+          className="text-xl font-bold tracking-tight"
           style={{ letterSpacing: "-0.03em" }}
+          animate={{ color: isLeaderboardSection ? "#F0EDE8" : "#FFD600" }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
         >
           waste a dollar.
         </motion.div>

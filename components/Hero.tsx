@@ -402,6 +402,7 @@ export default function Hero({
   const [trigger, setTrigger]       = useState(0);
   const [txtVisible, setTxtVisible] = useState(true);
   const [meme67RunId, setMeme67RunId] = useState(0);
+  const [isLeaderboardSection, setIsLeaderboardSection] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => { setTimeout(() => setMounted(true), 80); }, []);
@@ -419,6 +420,37 @@ export default function Hero({
     const id = setInterval(next, 5000);
     return () => clearInterval(id);
   }, [next]);
+
+  useEffect(() => {
+    const root = document.getElementById("snap-container");
+    if (!root) return;
+
+    const sections = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-snap-section][data-snap-index]")
+    );
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        let best: { idx: number; ratio: number } | null = null;
+        for (const entry of entries) {
+          const idxAttr = (entry.target as HTMLElement).getAttribute(
+            "data-snap-index"
+          );
+          const idx = idxAttr ? Number(idxAttr) : NaN;
+          if (!Number.isFinite(idx)) continue;
+          if (!best || entry.intersectionRatio > best.ratio) {
+            best = { idx, ratio: entry.intersectionRatio };
+          }
+        }
+        if (best) setIsLeaderboardSection(best.idx === 6);
+      },
+      { root, threshold: [0.45, 0.65, 0.85] }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
 
   const scrambled = useScramble(LINES[lineIdx], trigger);
 
@@ -477,19 +509,19 @@ export default function Hero({
         animation: "navIn 0.6s ease 0.1s both",
         fontFamily: "Inter, sans-serif",
       }}>
-        <span style={{ fontSize: "15px", fontWeight: 800, letterSpacing: "-0.04em", color: C.green }}>
+        <span style={{ fontSize: "15px", fontWeight: 800, letterSpacing: "-0.04em", color: isLeaderboardSection ? C.bg : C.green, transition: "color 0.25s ease" }}>
           waste a dollar.
         </span>
         <button onClick={onDonateClick} style={{
           padding: "10px 24px", borderRadius: "100px",
           background: "rgba(13,13,13,0.92)",
-          color: C.green,
+          color: isLeaderboardSection ? C.bg : C.green,
           border: "1px solid rgba(0,168,98,0.28)",
           boxShadow: "0 10px 26px rgba(0,0,0,0.16)",
           fontSize: "13px", fontWeight: 800,
           fontFamily: "Inter, sans-serif", cursor: "pointer",
           letterSpacing: "-0.01em",
-          transition: "opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease",
+          transition: "opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, color 0.25s ease",
         }}>
           Donate $1
         </button>
