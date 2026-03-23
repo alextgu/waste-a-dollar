@@ -187,7 +187,7 @@ const SCREENS = [
   { type: "txfeed",   label: "Activity"        },
   { type: "analytics",label: "Donations"       },
   { type: "card",     label: "Member card"     },
-  { type: "cert",     label: "Certificate"     },
+  { type: "cert",     label: "Purchase"          },
 ];
 
 // ── AMOUNT SCREEN ─────────────────────────────────────────────────────────────
@@ -815,7 +815,9 @@ function CardScreen({ visible }: { visible: boolean }) {
 }
 
 // ── CERT SCREEN ───────────────────────────────────────────────────────────────
-// Official certificate of donation. Deadpan. Overly formal for $1.
+// Trading-card certificate (matches Why section “Receive a certificate” design).
+const CERT_RARITY_LABELS = ["Common", "Uncommon", "Rare", "Epic", "Legendary"] as const;
+
 function CertScreen({ visible }: { visible: boolean }) {
   const [go, setGo] = useState(false);
   useEffect(() => {
@@ -825,110 +827,134 @@ function CertScreen({ visible }: { visible: boolean }) {
 
   const wrap: React.CSSProperties = {
     position: "absolute", inset: 0, display: "flex", flexDirection: "column",
-    padding: "18px 18px", alignItems: "center", justifyContent: "center", gap: "10px",
+    padding: "14px 14px 12px", alignItems: "stretch", justifyContent: "center", gap: "8px",
     opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(14px)",
     transition: "opacity 0.5s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1)",
   };
 
+  const G = PC.green;
+
   return (
     <div style={wrap}>
-      {/* Parchment certificate panel */}
-      <div style={{
-        width: "100%", position: "relative",
-        background: "linear-gradient(160deg, rgba(0,200,122,0.06) 0%, rgba(0,0,0,0) 60%)",
-        border: "1px solid rgba(0,200,122,0.18)",
-        borderRadius: "10px", padding: "14px 12px 12px",
-        transform: go ? "scale(1)" : "scale(0.92)", opacity: go ? 1 : 0,
-        transition: "transform 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s, opacity 0.6s ease 0.1s",
-        overflow: "hidden",
-      }}>
-        {/* Corner ornaments */}
-        {[
-          { top: "5px",  left:  "5px",  borderTop: "1px solid", borderLeft:  "1px solid" },
-          { top: "5px",  right: "5px",  borderTop: "1px solid", borderRight: "1px solid" },
-          { bottom: "5px", left: "5px", borderBottom: "1px solid", borderLeft:  "1px solid" },
-          { bottom: "5px", right: "5px",borderBottom: "1px solid", borderRight: "1px solid" },
-        ].map((s, i) => (
-          <div key={i} style={{ position: "absolute", width: "8px", height: "8px", borderColor: "rgba(0,200,122,0.3)", ...s }} />
-        ))}
-        {/* Certificate header */}
-        <div style={{ textAlign: "center", marginBottom: "8px" }}>
-          <div style={{ fontSize: "7px", fontWeight: 800, color: "rgba(0,200,122,0.45)", letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: "5px" }}>
-            Certificate of Donation
-          </div>
-          {/* Divider line with centre diamond */}
-          <div style={{ display: "flex", alignItems: "center", gap: "4px", justifyContent: "center", marginBottom: "8px" }}>
-            <div style={{ flex: 1, height: "1px", background: "linear-gradient(to right, transparent, rgba(0,200,122,0.25))" }} />
-            <span style={{ fontSize: "7px", color: "rgba(0,200,122,0.4)" }}>◆</span>
-            <div style={{ flex: 1, height: "1px", background: "linear-gradient(to left, transparent, rgba(0,200,122,0.25))" }} />
-          </div>
-          {/* Seal icon */}
+      <div
+        style={{
+          width: "100%",
+          transform: go ? "scale(1)" : "scale(0.94)", opacity: go ? 1 : 0,
+          transition: "transform 0.75s cubic-bezier(0.16,1,0.3,1) 0.08s, opacity 0.5s ease 0.08s",
+          display: "flex", flexDirection: "column", gap: "8px",
+        }}
+      >
+        {/* Credit card — same structure as WhySection IllustrationCertificate */}
+        <div style={{
+          width: "100%", aspectRatio: "85.6 / 53.98",
+          borderRadius: "12px", overflow: "hidden",
+          position: "relative",
+          background: "#0a0d0b",
+          border: `1px solid ${go ? "rgba(0,200,122,0.28)" : "rgba(255,255,255,0.08)"}`,
+          transition: "border-color 0.5s ease",
+        }}>
+          {/* No photo — dark card with subtle green depth */}
           <div style={{
-            width: "38px", height: "38px", borderRadius: "50%", margin: "0 auto 8px",
-            background: "radial-gradient(circle, rgba(0,200,122,0.12) 0%, rgba(0,200,122,0.04) 70%)",
-            border: "1px solid rgba(0,200,122,0.22)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            transform: go ? "scale(1) rotate(0deg)" : "scale(0.5) rotate(-20deg)",
-            transition: "transform 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.35s",
-            boxShadow: "0 0 14px rgba(0,200,122,0.1)",
+            position: "absolute", inset: 0, zIndex: 0,
+            background: "radial-gradient(ellipse 90% 70% at 50% 25%, rgba(0,200,122,0.09) 0%, transparent 50%), #0a0d0b",
+          }} />
+          <div style={{
+            position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1,
+            background: "linear-gradient(160deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.05) 45%, rgba(0,0,0,0.65) 100%)",
+          }} />
+          <div style={{
+            position: "absolute", inset: 0, pointerEvents: "none", zIndex: 1,
+            background: go
+              ? "repeating-linear-gradient(-42deg,transparent,transparent 12px,rgba(0,200,122,0.04) 12px,rgba(0,200,122,0.04) 13px)"
+              : "repeating-linear-gradient(-42deg,transparent,transparent 12px,rgba(255,255,255,0.02) 12px,rgba(255,255,255,0.02) 13px)",
+            transition: "background 0.45s ease",
+          }} />
+          <div style={{
+            position: "absolute", inset: 0, padding: "10px 12px",
+            display: "flex", flexDirection: "column", justifyContent: "space-between",
+            zIndex: 2, fontFamily: "Inter, sans-serif",
           }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={PC.green} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-              <polyline points="22,4 12,14.01 9,11.01"/>
-            </svg>
-          </div>
-          {/* "This certifies that" */}
-          <div style={{ fontSize: "7px", color: PC.muted, letterSpacing: "0.04em", marginBottom: "4px" }}>
-            This certifies that
-          </div>
-          {/* Recipient name */}
-          <div style={{
-            fontSize: "16px", fontWeight: 900, color: PC.white, letterSpacing: "-0.03em", lineHeight: 1.1,
-            transform: go ? "translateY(0)" : "translateY(6px)", opacity: go ? 1 : 0,
-            transition: "transform 0.5s ease 0.45s, opacity 0.5s ease 0.45s",
-          }}>YOU</div>
-          {/* Underline */}
-          <div style={{ height: "1px", background: "linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent)", margin: "4px 20% 6px" }} />
-          <div style={{ fontSize: "7.5px", color: "rgba(255,255,255,0.35)", letterSpacing: "0.03em", lineHeight: 1.5 }}>
-            has donated the sum of
-          </div>
-          {/* Amount */}
-          <div style={{
-            fontSize: "22px", fontWeight: 900, color: PC.green, letterSpacing: "-0.04em",
-            lineHeight: 1, marginTop: "2px",
-            filter: "drop-shadow(0 0 8px rgba(0,200,122,0.35))",
-            transform: go ? "translateY(0)" : "translateY(8px)", opacity: go ? 1 : 0,
-            transition: "transform 0.5s ease 0.55s, opacity 0.5s ease 0.55s",
-          }}>$1.00</div>
-          <div style={{ fontSize: "7px", color: "rgba(255,255,255,0.2)", letterSpacing: "0.06em", marginTop: "3px", textTransform: "uppercase" }}>
-            One Dollar Exactly · USD
-          </div>
-          {/* Divider */}
-          <div style={{ display: "flex", alignItems: "center", gap: "4px", justifyContent: "center", margin: "8px 0 5px" }}>
-            <div style={{ flex: 1, height: "1px", background: "linear-gradient(to right, transparent, rgba(0,200,122,0.2))" }} />
-            <span style={{ fontSize: "6px", color: "rgba(0,200,122,0.35)" }}>· · ·</span>
-            <div style={{ flex: 1, height: "1px", background: "linear-gradient(to left, transparent, rgba(0,200,122,0.2))" }} />
-          </div>
-          <div style={{ fontSize: "7px", color: "rgba(255,255,255,0.22)", letterSpacing: "0.03em" }}>
-            to Alex, for no particular reason.
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              <div style={{
+                fontSize: "7px", fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase",
+                color: go ? "rgba(0,200,122,0.75)" : "rgba(255,255,255,0.35)",
+                transition: "color 0.45s ease",
+              }}>Purchase</div>
+              <div style={{
+                padding: "2px 6px", borderRadius: "100px",
+                fontSize: "6px", fontWeight: 800, letterSpacing: "0.1em",
+                background: go ? "rgba(0,200,122,0.18)" : "rgba(255,255,255,0.08)",
+                border: `1px solid ${go ? "rgba(0,200,122,0.4)" : "rgba(255,255,255,0.12)"}`,
+                color: go ? G : "rgba(255,255,255,0.35)",
+                transition: "all 0.45s ease",
+              }}>COMMON</div>
+            </div>
+            <div style={{
+              width: "22px", height: "17px", borderRadius: "3px",
+              background: go
+                ? "linear-gradient(135deg, rgba(0,200,122,0.28) 0%, rgba(0,200,122,0.1) 100%)"
+                : "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%)",
+              border: `1px solid ${go ? "rgba(0,200,122,0.35)" : "rgba(255,255,255,0.12)"}`,
+              position: "relative", overflow: "hidden", transition: "all 0.45s ease",
+            }}>
+              <div style={{ position: "absolute", top: "50%", left: 0, right: 0, height: "1px", background: go ? "rgba(0,200,122,0.28)" : "rgba(255,255,255,0.1)", transform: "translateY(-50%)" }} />
+              <div style={{ position: "absolute", left: "50%", top: 0, bottom: 0, width: "1px", background: go ? "rgba(0,200,122,0.28)" : "rgba(255,255,255,0.1)", transform: "translateX(-50%)" }} />
+            </div>
+            <div style={{
+              fontSize: "8px", fontWeight: 600, letterSpacing: "0.2em", fontVariantNumeric: "tabular-nums",
+              color: go ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.35)",
+              transition: "color 0.45s ease",
+            }}>•••• •••• •••• 0001</div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+              <div>
+                <div style={{ fontSize: "6px", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.25)", marginBottom: "2px" }}>Card holder</div>
+                <div style={{
+                  fontSize: "9px", fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase",
+                  color: go ? "#fff" : "rgba(255,255,255,0.72)",
+                  transition: "color 0.45s ease",
+                }}>Alex</div>
+                <div style={{ display: "flex", gap: "2px", marginTop: "4px" }}>
+                  {[true, false, false, false, false].map((on, i) => (
+                    <div key={i} style={{
+                      width: "6px", height: "6px", borderRadius: "1px",
+                      background: on ? (go ? G : "rgba(255,255,255,0.28)") : "rgba(255,255,255,0.06)",
+                      transition: "background 0.45s ease",
+                    }} />
+                  ))}
+                </div>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <div style={{ fontSize: "6px", letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.22)", marginBottom: "2px" }}>Amount</div>
+                <div style={{
+                  fontSize: "8px", fontWeight: 700,
+                  color: go ? "rgba(0,200,122,0.9)" : "rgba(255,255,255,0.45)",
+                  transition: "color 0.45s ease",
+                }}>$1.00</div>
+              </div>
+            </div>
           </div>
         </div>
-        {/* Footer row: issue date + ref */}
-        <div style={{
-          display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "6px",
-          transform: go ? "translateY(0)" : "translateY(4px)", opacity: go ? 1 : 0,
-          transition: "transform 0.4s ease 0.7s, opacity 0.4s ease 0.7s",
-        }}>
-          <div>
-            <div style={{ fontSize: "5.5px", color: PC.muted, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "1px" }}>Issued</div>
-            <div style={{ fontSize: "7.5px", fontWeight: 600, color: "rgba(255,255,255,0.4)" }}>2026</div>
+
+        {/* Rarity bar — tuned for dark phone UI */}
+        <div style={{ opacity: go ? 1 : 0, transform: go ? "translateY(0)" : "translateY(6px)", transition: "opacity 0.45s ease 0.35s, transform 0.45s ease 0.35s" }}>
+          <div style={{ display: "flex", gap: "4px", height: "5px" }}>
+            {CERT_RARITY_LABELS.map((_, i) => (
+              <div key={i} style={{
+                flex: 1, borderRadius: "3px",
+                background: i === 0 ? (go ? "rgba(0,200,122,0.85)" : "rgba(255,255,255,0.12)") : "rgba(255,255,255,0.06)",
+                transition: "background 0.45s ease",
+              }} />
+            ))}
           </div>
-          <div style={{ padding: "2px 7px", borderRadius: "100px", background: "rgba(0,200,122,0.08)", border: "1px solid rgba(0,200,122,0.15)" }}>
-            <span style={{ fontSize: "6.5px", fontWeight: 700, color: PC.green, letterSpacing: "0.06em" }}>OFFICIAL</span>
-          </div>
-          <div style={{ textAlign: "right" }}>
-            <div style={{ fontSize: "5.5px", color: PC.muted, letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "1px" }}>Ref</div>
-            <div style={{ fontSize: "7.5px", fontWeight: 600, color: "rgba(255,255,255,0.4)", fontFamily: "'Courier New', monospace" }}>#0001</div>
+          <div style={{ display: "flex", marginTop: "5px" }}>
+            {CERT_RARITY_LABELS.map((label, i) => (
+              <div key={i} style={{
+                flex: 1, textAlign: "center",
+                fontSize: "6.5px", fontWeight: 700, letterSpacing: "0.02em", fontFamily: "Inter, sans-serif",
+                color: i === 0 ? (go ? G : "rgba(255,255,255,0.28)") : "rgba(255,255,255,0.2)",
+                transition: "color 0.45s ease",
+              }}>{label}</div>
+            ))}
           </div>
         </div>
       </div>
@@ -1358,10 +1384,7 @@ export default function Hero({ onDonateClick, videoSrc, donationCount = 0, donat
           </div>
         </div>
 
-        {/* RIGHT — perspective container + 3D tilt layer
-            The hand video (videoSrc) slots straight into the tilt wrapper —
-            it will rotate with the phone automatically. Film the hand straight-on,
-            centered, so the cursor tilt provides the angle illusion. */}
+        {/* RIGHT — perspective container + 3D tilt layer (optional video replaces phone mockup) */}
         <div style={{
           position: "relative", zIndex: 2, flexShrink: 0,
           animation: mounted ? "fadeIn 1s ease 0.5s both" : "none",
@@ -1388,37 +1411,8 @@ export default function Hero({ onDonateClick, videoSrc, donationCount = 0, donat
             ) : (
               <>
                 <div style={{ position: "absolute", top: "50%", left: "50%", width: "340px", height: "460px", borderRadius: "50%", background: "radial-gradient(ellipse, rgba(0,168,98,0.09) 0%, transparent 70%)", transform: "translate(-50%, -50%)", filter: "blur(32px)", pointerEvents: "none" }} />
-                {/* Phone + hand share one box; hand is behind (lower z-index). */}
-                <div
-                  style={{
-                    position: "relative",
-                    display: "inline-block",
-                    width: "260px",
-                    height: "530px",
-                    animation: "phoneFloat 8s ease-in-out infinite",
-                  }}
-                >
-                  <img
-                    src="/hand_right.png"
-                    alt=""
-                    style={{
-                      position: "absolute",
-                      inset: "auto",
-                      /* Uniformly scale image up (same aspect ratio, no vertical-only stretch) */
-                      width: "920px",
-                      height: "auto",
-                      /* Palm / wrist anchored under phone; wide asset extends left */
-                      right: "-128px",
-                      bottom: "-52px",
-                      pointerEvents: "none",
-                      zIndex: 0,
-                      transform: "rotate(-7deg)",
-                      transformOrigin: "82% 88%",
-                    }}
-                  />
-                  <div style={{ position: "relative", zIndex: 1, width: "260px", height: "530px" }}>
-                    <Phone donationCount={liveCount} donationTotal={liveTotal} />
-                  </div>
+                <div style={{ animation: "phoneFloat 8s ease-in-out infinite" }}>
+                  <Phone donationCount={liveCount} donationTotal={liveTotal} />
                 </div>
                 <div style={{ position: "absolute", bottom: "-24px", left: "50%", transform: "translateX(-50%)", width: "180px", height: "30px", background: "radial-gradient(ellipse, rgba(0,0,0,0.1) 0%, transparent 70%)", filter: "blur(12px)" }} />
               </>

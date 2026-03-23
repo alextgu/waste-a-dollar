@@ -61,7 +61,7 @@ export default function Home() {
       </div>
 
       <div style={{ height: "100vh", overflow: "hidden" }}>
-        <WhySection onDonateClick={() => setIsDonateModalOpen(true)} />
+        <WhySection />
       </div>
 
       <div style={{ height: "100vh", overflow: "hidden" }}>
